@@ -1,27 +1,28 @@
 import React, {ChangeEvent} from 'react';
 import p from './MyPosts.module.css';
 import { Post} from "./dream/Post";
-import { StateType} from "../../../Redux/State"
+import {ActionTypes, addPostAC, changeNewTextAC, StateType} from "../../../Redux/State"
 
 type AppPropsType = {
     posts: StateType
     newPostText: string
-    addNewdream: (post: string) => void
-    changeNewTextCallback:(newText:string)=> void
+    dispatch: (action: ActionTypes)=> void
+    // updateNewText:(text:string)=> void
+    // addPost:()=> void
 }
 
 export const MyPosts = (props:AppPropsType) => {
 
     let newText = props.posts.profilePage.posts.map(d => <Post message={d.message} like={d.like}/>)
-    // let newDreamElement = React.createRef<HTMLTextAreaElement>()
-    let addDream = () => {
-        props.addNewdream(props.newPostText)
-
-
+    let newDreamElement = React.createRef<HTMLTextAreaElement>()
+    let addPost = () => {
+        // props.dispatch({type:'ADD-POST', postText:props.newPostText})
+        props.dispatch(addPostAC(props.newPostText))
     }
-    const ChangeTextArea = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const newChangeTextArea = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        // props.updateNewText(e.currentTarget.value)
+            props.dispatch({type:"CHANGE-NEW-TEXT", newText: e.currentTarget.value})
 
-            props.changeNewTextCallback(e.currentTarget.value)
         }
 
 
@@ -31,9 +32,9 @@ export const MyPosts = (props:AppPropsType) => {
                 {props.posts.profilePage.posts.map(t => <div key={t.id}><b>{t.message}</b></div>)}
                 <div>
                 <textarea value={props.newPostText}
-                          onChange={ChangeTextArea}/>
+                          onChange={newChangeTextArea}/>
 
-                    <button onClick={addDream}>Add dream</button>
+                    <button onClick={addPost}>Add post</button>
                     <div>{newText}</div>
                 </div>
 

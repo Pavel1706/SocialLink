@@ -1,7 +1,6 @@
 import React from 'react';
 import p from './Nav.module.css';
 import {NavLink} from "react-router-dom";
-import {Friends} from "../Friends/Friends";
 import {ConversationType} from "../../Redux/State";
 
 

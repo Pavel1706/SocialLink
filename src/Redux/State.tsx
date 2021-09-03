@@ -1,10 +1,13 @@
 import React from "react";
 import { rerenderEntireTree} from "../index";
+import {profileReducer} from "./profileReducer";
+import {messageReducer} from "./messageReducer";
 
 
 export type DreamTextType = {
     posts: Array<DreamType>
     newPostText: string|''
+
 }
 
 export type DreamType = {
@@ -24,34 +27,73 @@ export type ConversationArrayType = {
 
 export type MessageArrayType = {
     messageData: Array<MessageType>
+    newMessage:string
 }
 
 export type MessageType = {
     id: number
     message: string
-}
 
-export type mainStateType ={
-    newState: StateType
 }
+//
+// export type mainStateType ={
+//     newState: StateType
+// }
 export type StateType = {
     profilePage: DreamTextType
     dialogsPage: ConversationArrayType
     messagePage: MessageArrayType
+
 
 }
 
 
 export type StoreType = {
     _state: StateType
-    changeNewTextCallback: (newText: string) => void
-    addPost: (postText:string)=> void
-    addPostMessage:(postText:string)=> void
+    // changeNewTextCallback: (newText: string) => void
+    // addPost: (postText:string)=> void
+    // addPostMessage:(postText:string)=> void
     _onChange: ()=> void
     subscribe:(callback: ()=> void)=> void
     getState:()=> StateType
+    dispatch: (action: ActionTypes)=> void
+}
+// type AddPostActionType ={
+//     type: 'ADD-POST'
+//     postText: string
+// }
+
+export type ActionTypes = ReturnType<typeof addPostAC>
+    | ReturnType<typeof changeNewTextAC >
+     | ReturnType<typeof NewMessageAC>
+     | ReturnType<typeof addNewMessageAC>
+
+export const NewMessageAC = (newMessage:string)=>{
+    return {
+        type: 'NEW-MESSAGE',
+        postText: newMessage
+    } as const
+}
+export const addNewMessageAC = (newMessage:string)=>{
+    return {
+        type: 'ADD-NEW-MESSAGE',
+        newMessage: newMessage
+    } as const
 }
 
+
+export const addPostAC = (postText:string)=> {
+    return {
+        type: "ADD-POST",
+        postText: postText
+    } as const
+}
+export const changeNewTextAC = (newText:string) => {
+    return {
+        type: "CHANGE-NEW-TEXT",
+        newText: newText
+    } as const
+}
 
 export const store: StoreType ={
     _state: {
@@ -83,48 +125,73 @@ export const store: StoreType ={
                 {id: 4, message: 'How`s life?'},
                 {id: 5, message: 'I got it!'},
                 {id: 6, message: 'Catch you around!'},
-            ]
+            ],
+            newMessage:''
         }
 
     },
-
-    changeNewTextCallback(newText:string){
-        this._state.profilePage.newPostText = newText
-        this._onChange()
-    },
-    addPost(postText:string){
-        let newPost: DreamType = {
-            id: new Date().getTime(),
-            message: postText,
-            like: 0
-        }
-        this._state.profilePage.posts.push(newPost)
-        this._state.profilePage.newPostText=''
-        this._onChange();
-    },
-
-    addPostMessage(postText:string){
-        let newPost: MessageType = {
-            id: new Date().getTime(),
-            message: postText
-
-        }
-
-        this._state.messagePage.messageData.push(newPost)
-        this._onChange();
-    },
-// I didn`t catch it this function
     _onChange(){
 
     },
-
     subscribe(callback){
         this._onChange=callback
     },
-
     getState(){
         return this._state;
-    }
+    },
+    // changeNewTextCallback(newText:string){
+    //     this._state.profilePage.newPostText = newText
+    //     this._onChange(this._state)
+    // },
+    // addPost(postText:string){
+    //     let newPost: DreamType = {
+    //         id: new Date().getTime(),
+    //         message: postText,
+    //         like: 0
+    //     }
+    //     this._state.profilePage.posts.push(newPost)
+    //     this._state.profilePage.newPostText=''
+    //     this._onChange(this._state);
+    // },
+    // addPostMessage(postText:string){
+    //     let newPost: MessageType = {
+    //         id: new Date().getTime(),
+    //         message: postText
+    //     }
+    //     this._state.messagePage.messageData.push(newPost)
+    //     this._onChange(this._state);
+    // },
+    dispatch(action){
+
+         profileReducer(store._state.profilePage, action)
+         messageReducer(store._state.messagePage, action)
+        this._onChange()
+            // if(action.type=== 'ADD-POST'){
+            //     let newPost: DreamType = {
+            //         id: new Date().getTime(),
+            //         message: action.postText,
+            //         like: 0
+            //     }
+            //     this._state.profilePage.posts.push(newPost)
+            //     this._state.profilePage.newPostText=''
+            //     this._onChange(this._state);
+            // } else if (action.type ==='CHANGE-NEW-TEXT'){
+            //     this._state.profilePage.newPostText = action.newText
+            //     this._onChange(this._state)
+            // }
+            // else if(action.type === 'ADD-NEW-MESSAGE'){
+            //     let newPost: MessageType = {
+            //         id: new Date().getTime(),
+            //         message: action.newMessage
+            //     }
+            //     this._state.messagePage.messageData.push(newPost)
+            //     this._state.messagePage.newMessage=''
+            //     this._onChange(this._state)
+            // }else if (action.type === 'NEW-MESSAGE'){
+            //     this._state.messagePage.newMessage=action.postText
+            //     this._onChange(this._state)
+            // }
+            }
 
 }
 

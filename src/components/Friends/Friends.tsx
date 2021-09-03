@@ -12,7 +12,7 @@ export const Friends =(props:ConversationArrayType)=>{
     return(
         <div className={p.avatar} >
 
-            {props.dialogs.map(t=> <li key={t.id}><div>{t.name} <img className={p.avatar} src={t.foto} /></div></li> )}
+            {props.dialogs.map(t=> <li key={t.id}><div>{t.name} <img alt={'foto'} className={p.avatar} src={t.foto} /></div></li> )}
 
 
 
