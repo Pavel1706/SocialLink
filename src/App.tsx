@@ -16,7 +16,7 @@ type PropsType = {
 }
 
 const App: React.FC<PropsType> = (props) => {
-    debugger
+
     const state = props.store.getState()
     return (
 

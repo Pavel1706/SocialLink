@@ -1,26 +1,32 @@
 import React, {ChangeEvent} from 'react';
-import { Post} from "./dream/Post";
+import {Post} from "./dream/Post";
 import {ActionTypes, addPostAC, changeNewTextAC, StateType} from "../../../Redux/State"
 import {MyPosts} from "./MyPosts";
 
 type AppPropsType = {
     posts: StateType
     newPostText: string
-    dispatch: (action: ActionTypes)=> void
+    dispatch: (action: ActionTypes) => void
 }
 
-export const MyPostsContainer = (props:AppPropsType) => {
-    // let newDreamElement = React.createRef<HTMLTextAreaElement>()
+export const MyPostsContainer = (props: AppPropsType) => {
+    let newDreamElement = React.createRef<HTMLTextAreaElement>()
 
     let addPost = () => {
         // props.dispatch({type:'ADD-POST', postText:props.newPostText})
         props.dispatch(addPostAC(props.newPostText))
     }
     const ChangeTextArea = (text:string) => {
-        // let newText=e.currentTarget.value
-        props.dispatch({type:"CHANGE-NEW-TEXT", newText: text})
-        // props.dispatch(changeNewTextAC(newText))
+        console.log(text)
+            if(newDreamElement.current)
+            props.dispatch(changeNewTextAC(text))
+
+        // props.dispatch({type: "CHANGE-NEW-TEXT", newText: text})
+
     }
 
-    // return(<MyPosts updateNewText={ChangeTextArea} addPost={addPost}/>)
+    return (<MyPosts newPostText={props.newPostText}
+        posts={props.posts}
+        updateNewText={ChangeTextArea}
+        addPost={addPost}/>)
 }
