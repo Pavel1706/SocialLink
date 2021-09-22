@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActionTypes, ConversationArrayType} from "./State";
+
 
 let initialState= {
     dialogs: [
@@ -14,7 +14,13 @@ let initialState= {
 }
 
 
-export const dialogsReducer = (state=initialState,action:ActionTypes)=> {
+export const dialogsReducer = (state=initialState,action:DialogType)=> {
 
     return state
 }
+export const newDialogAC= ()=> {
+    return {
+        type: 'DIALOG-MESSAGE'
+    } as const
+}
+type DialogType = ReturnType<typeof newDialogAC >

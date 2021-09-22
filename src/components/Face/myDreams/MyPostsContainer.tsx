@@ -1,32 +1,38 @@
-import React, {ChangeEvent} from 'react';
-import {Post} from "./dream/Post";
-import {ActionTypes, addPostAC, changeNewTextAC, StateType} from "../../../Redux/State"
+import React from 'react';
 import {MyPosts} from "./MyPosts";
+import {connect} from 'react-redux';
+import {AppStateType} from "../../../Redux/reduxStore";
+import {addPostAC, changeNewTextAC, InitialStateType} from "../../../Redux/profileReducer";
+import {Dispatch} from 'redux';
 
-type AppPropsType = {
-    posts: StateType
-    newPostText: string
-    dispatch: (action: ActionTypes) => void
+
+type MapStatePropsType = {
+    profilePage: InitialStateType
+
+}
+type MapDispatchPropsType = {
+    updateNewText: (text: string) => void
+    addPost: () => void
+}
+export type MyPostsPropsType = MapStatePropsType & MapDispatchPropsType
+
+let mapStateToProps = (state: AppStateType): MapStatePropsType => {
+    return {
+        profilePage: state.profilePage
+    }
 }
 
-export const MyPostsContainer = (props: AppPropsType) => {
-    let newDreamElement = React.createRef<HTMLTextAreaElement>()
 
-    let addPost = () => {
-        // props.dispatch({type:'ADD-POST', postText:props.newPostText})
-        props.dispatch(addPostAC(props.newPostText))
+let mapDispatchToProps = (dispatch: Dispatch): MapDispatchPropsType => {
+    return {
+        updateNewText: (text: string) => {
+            dispatch(changeNewTextAC(text))
+        },
+        addPost: () => {
+            dispatch(addPostAC())
+        }
     }
-    const ChangeTextArea = (text:string) => {
-        console.log(text)
-            if(newDreamElement.current)
-            props.dispatch(changeNewTextAC(text))
-
-        // props.dispatch({type: "CHANGE-NEW-TEXT", newText: text})
-
-    }
-
-    return (<MyPosts newPostText={props.newPostText}
-        posts={props.posts}
-        updateNewText={ChangeTextArea}
-        addPost={addPost}/>)
 }
+
+
+export const SuperDialogsContainer = connect(mapStateToProps, mapDispatchToProps)(MyPosts);

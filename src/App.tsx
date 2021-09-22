@@ -4,36 +4,30 @@ import {Header} from "./components/Header/Header";
 import {Nav} from "./components/Nav/Nav";
 import { Profile} from "./components/Face/Profile";
 import {Conversation} from "./components/Conversation/Conversation";
-import {BrowserRouter, Route} from "react-router-dom";
+import {Route} from "react-router-dom";
 import {Friends} from "./components/Friends/Friends";
 import {store} from "./Redux/State";
-import  {StoreType} from "./Redux/reduxStore";
+import {Users} from "./components/Users/Users";
+import {UsersContainer} from "./components/Users/UsersContainer";
 
 
 
-type PropsType = {
-    store: StoreType
-}
+const App: React.FC = () => {
 
-const App: React.FC<PropsType> = (props) => {
 
-    const state = props.store.getState()
     return (
 
             <div className='app-wrapper'>
                 <Header/>
-                <Nav dialogs={state.dialogsPage.dialogs}/>
+                <Nav dialogs={store._state.dialogsPage.dialogs}/>
                 <div className='app-wrapper-content '>
-                    <Route path='/Conversation' render={()=><Conversation state={state} dispatch={props.store.dispatch.bind(props.store)}
-                                                                          newMessage={state.messagePage.newMessage} />}/>
-                    <Route path='/Face' render={()=><Profile posts={state}
-                                                             dispatch={props.store.dispatch.bind(props.store)}
-                                                          newPostText={state.profilePage.newPostText}
-                                                            />}/>
+                    <Route path='/conversation' render={()=><Conversation  />}/>
+                    <Route path='/face' render={()=><Profile    />}/>
+                    <Route path='/users' render={()=><UsersContainer />}/>
 
                     <Route path='/news' />
                     <Route path='/music' />
-                    <Route path='/settings' /><Route path='/Friends' render={()=> <Friends dialogs={state.dialogsPage.dialogs} />}/>
+                    <Route path='/settings' /><Route path='/friends' render={()=> <Friends dialogs={store._state.dialogsPage.dialogs} />}/>
                 </div>
             </div>
 
